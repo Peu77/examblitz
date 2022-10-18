@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 @Component
-public class JetAuthEntryPoint implements AuthenticationEntryPoint, Serializable {
+public class JwtAuthEntryPoint implements AuthenticationEntryPoint, Serializable {
 
     private static final long serialVersionUID = -8970718410437077606L;
 
