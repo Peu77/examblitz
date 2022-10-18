@@ -1,6 +1,6 @@
 package de.examblitz.core.config;
 
-import de.examblitz.core.auth.JetAuthEntryPoint;
+import de.examblitz.core.auth.JwtAuthEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -16,7 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private JetAuthEntryPoint jwtAuthEntryPoint;
+    private JwtAuthEntryPoint jwtAuthEntryPoint;
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
