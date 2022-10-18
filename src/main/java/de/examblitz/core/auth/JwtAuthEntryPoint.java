@@ -11,15 +11,12 @@ import java.io.IOException;
 import java.io.Serializable;
 
 @Component
-public class JwtAuthEntryPoint implements AuthenticationEntryPoint, Serializable {
-
-    private static final long serialVersionUID = -8970718410437077606L;
+public class JwtAuthEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AuthenticationException authException) throws IOException, ServletException {
+            HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException authException) throws IOException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
     }
 }

@@ -1,17 +1,17 @@
 package de.examblitz.core.controller;
 
-import de.examblitz.core.auth.JwtRequest;
-import de.examblitz.core.auth.JwtResponse;
-import de.examblitz.core.auth.JwtTokenUtil;
-import de.examblitz.core.auth.JwtUserDetailsService;
+import de.examblitz.core.utils.UserPrincipal;
+import de.examblitz.core.dto.AuthorizeUserDto;
+import de.examblitz.core.dto.TokenResponse;
+import de.examblitz.core.utils.JwtTokenUtil;
+import de.examblitz.core.services.JwtUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 
 @RestController
 @CrossOrigin
@@ -24,29 +24,28 @@ public class JwtAuthController {
     private JwtUserDetailsService userDetailsService;
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody JwtRequest authenticationRequest) throws Exception {
+    public ResponseEntity<?> saveUser(@RequestBody AuthorizeUserDto authenticationRequest) {
         return ResponseEntity.ok(userDetailsService.save(authenticationRequest));
     }
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
-        final UserDetails userDetails = userDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
-
-        final String token = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new JwtResponse(token));
-    }
-
-    private void authenticate(String username, String password) throws Exception {
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthorizeUserDto authenticationRequest) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
-        } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            // This is adding all necessary information to the current context.
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    authenticationRequest.name(), authenticationRequest.password()));
+
+        } catch (Exception exception) {
+            return ResponseEntity.badRequest().build();
         }
+
+        // This converts a
+        final UserPrincipal principal = userDetailsService
+                .loadUserByUsername(authenticationRequest.name());
+
+        // Finally, were generating a token, for the user who verified their identity
+        final String token = jwtTokenUtil.generateToken(new HashMap(), principal.getUsername());
+
+        return ResponseEntity.ok(new TokenResponse(token));
     }
 }

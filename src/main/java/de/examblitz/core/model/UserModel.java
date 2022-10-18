@@ -6,12 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-
-import static java.util.Collections.emptyList;
 
 /**
  * This describes a user, that is able to interact with the platform.
@@ -21,7 +17,7 @@ import static java.util.Collections.emptyList;
 @Setter
 @Entity
 @Data
-public class User {
+public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
