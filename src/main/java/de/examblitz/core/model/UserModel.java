@@ -1,7 +1,6 @@
 package de.examblitz.core.model;
 
 import de.examblitz.core.utils.StringListConverter;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +15,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Data
 public class UserModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,9 +26,6 @@ public class UserModel {
 
     @Column(name = "password", nullable = false)
     private String password;
-
-    @Column(name = "password_salt", nullable = false)
-    private String passwordSalt;
 
     @Convert(converter = StringListConverter.class)
     @Column(name = "authorities", nullable = false)

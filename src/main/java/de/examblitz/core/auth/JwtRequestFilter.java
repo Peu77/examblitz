@@ -1,6 +1,6 @@
 package de.examblitz.core.auth;
 
-import de.examblitz.core.services.JwtUserDetailsService;
+import de.examblitz.core.services.PrincipalService;
 import de.examblitz.core.utils.JwtTokenUtil;
 import de.examblitz.core.utils.UserPrincipal;
 import io.jsonwebtoken.Claims;
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private JwtTokenUtil jwtTokenUtil;
-    private JwtUserDetailsService jwtUserDetailsService;
+    private PrincipalService principalService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -40,7 +40,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String jwtToken = requestTokenHeader.replace("Bearer ", "");
         String username = jwtTokenUtil.getClaimFromToken(jwtToken, Claims::getSubject);
 
-        UserPrincipal principal = this.jwtUserDetailsService.loadUserByUsername(username);
+        UserPrincipal principal = this.principalService.loadUserByUsername(username);
 
         // Return, if the token isn't a valid one.
         if (!jwtTokenUtil.validateToken(jwtToken, principal)) {
