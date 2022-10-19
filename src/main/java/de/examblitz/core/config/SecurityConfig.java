@@ -47,7 +47,7 @@ public class SecurityConfig {
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                    .authorizeRequests().antMatchers("/auth/public/**").permitAll().
+                    .authorizeRequests().antMatchers("/**/public/**").permitAll().
                     anyRequest().authenticated().and().
                     exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).
                     and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
