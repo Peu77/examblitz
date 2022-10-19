@@ -60,7 +60,7 @@ public class AuthService {
         }
 
         // Finally, were generating a token, for the user who verified their identity
-        return Optional.of(jwtTokenUtil.generateToken(new HashMap(), principal.getUsername()));
+        return Optional.of(jwtTokenUtil.generateToken(new HashMap<>(), principal.getUsername()));
     }
 
     /**

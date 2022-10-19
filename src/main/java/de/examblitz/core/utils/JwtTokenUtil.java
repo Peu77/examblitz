@@ -1,9 +1,6 @@
 package de.examblitz.core.utils;
 
-
-import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -64,7 +61,7 @@ public class JwtTokenUtil {
      */
     public Boolean validateToken(String token, UserDetails details) {
         final String username = getClaimFromToken(token, Claims::getSubject);
-        final Boolean expired = getClaimFromToken(token, Claims::getExpiration).before(new Date());
+        final boolean expired = getClaimFromToken(token, Claims::getExpiration).before(new Date());
 
         return (username.equals(details.getUsername()) && !expired);
     }
