@@ -37,19 +37,19 @@ public class SecurityConfig {
                                              PrincipalService principalService) throws Exception {
 
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                   .userDetailsService(principalService)
-                   .passwordEncoder(passwordEncoder)
-                   .and()
-                   .build();
+                .userDetailsService(principalService)
+                .passwordEncoder(passwordEncoder)
+                .and()
+                .build();
     }
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                    .authorizeRequests().antMatchers("/**/public/**").permitAll().
-                    anyRequest().authenticated().and().
-                    exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).
-                    and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .authorizeRequests().antMatchers("/**/public/**").permitAll().
+                anyRequest().authenticated().and().
+                exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).
+                and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
