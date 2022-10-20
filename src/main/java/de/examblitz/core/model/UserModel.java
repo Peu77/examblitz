@@ -1,11 +1,13 @@
 package de.examblitz.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.examblitz.core.utils.StringListConverter;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -30,5 +32,9 @@ public class UserModel {
     @Convert(converter = StringListConverter.class)
     @Column(name = "authorities", nullable = false)
     private List<String> authorities;
+
+    @ManyToMany(mappedBy = "allowedUsers")
+    @JsonIgnore
+    private Set<TestModel> accessibleTasks;
 }
 
