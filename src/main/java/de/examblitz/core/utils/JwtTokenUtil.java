@@ -19,6 +19,7 @@ public class JwtTokenUtil {
      * This specifies for how long a token is valid.
      */
     public static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60;
+    public static final String COOKIE_NAME = "AUTH_TOKEN";
 
     /**
      * This is for validating, and encrypting a JWT-Token.

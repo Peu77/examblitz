@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Component
 @AllArgsConstructor
@@ -26,19 +27,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        final String requestTokenHeader = request.getHeader("Authorization");
+        var cookies = request.getCookies();
 
-        // Validating the header
-        if (requestTokenHeader == null
-            || !requestTokenHeader.startsWith("Bearer ")
-            || SecurityContextHolder.getContext().getAuthentication() != null) {
-
+        if (cookies == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String jwtToken = requestTokenHeader.replace("Bearer ", "");
-        String username = jwtTokenUtil.getClaimFromToken(jwtToken, Claims::getSubject);
+        // The cookie that holds the value of the token required to authenticate and
+        // authorize
+        var tokenCookie = Arrays.stream(cookies).filter(cookie ->
+                                                                cookie.getName().equals(JwtTokenUtil.COOKIE_NAME)).findFirst();
+
+        if (tokenCookie.isEmpty()) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        var jwtToken = tokenCookie.get().getValue();
+        var username = jwtTokenUtil.getClaimFromToken(jwtToken, Claims::getSubject);
 
         UserPrincipal principal = this.principalService.loadUserByUsername(username);
 
