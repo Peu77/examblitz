@@ -1,37 +1,24 @@
 import {
     TextInput,
     PasswordInput,
-    Checkbox,
     Anchor,
     Paper,
     Title,
     Text,
     Container,
-    Group,
-    Button,
+    Button, LoadingOverlay, Alert,
 } from '@mantine/core';
-import {NextLink} from "@mantine/next";
+import {IconAlertCircle} from '@tabler/icons';
 import Link from "next/link";
 import {useRef} from "react";
+import {useLoginMutation} from "../../src/api/auth";
 
 const Login = () => {
     const nameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
-    function login() {
-        fetch("/api/auth/public/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: nameRef.current?.value,
-                password: passwordRef.current?.value,
-            })
-        }).then(response => response.json()).then(data => {
-            console.log(data)
-        })
-    }
+    // Mutations
+    const [login, result] = useLoginMutation()
 
     return (
         <Container size={420} my={40}>
@@ -46,21 +33,27 @@ const Login = () => {
 
                 <Link href={"/account/register"}>
                     <Anchor component={"a"} size="sm">
-                        Create Account
+                        Sign Up
                     </Anchor>
                 </Link>
             </Text>
 
-            <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+            {result.error ? (
+                <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
+                    Authentication Failed. Please check your credentials, otherwise contact an administrator.
+                </Alert>) : ""
+            }
+
+            <Paper withBorder shadow="md" p={30} mt={30} radius="md" style={{position: "relative"}}>
+                <LoadingOverlay visible={result.isLoading} overlayBlur={2}/>
+
                 <TextInput label="Name" placeholder="John Doe" required ref={nameRef}/>
                 <PasswordInput label="Password" placeholder="Your password" required mt="md" ref={passwordRef}/>
-                <Group position="apart" mt="md">
-                    <Checkbox label="Remember me"/>
-                    <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
-                        Forgot password?
-                    </Anchor>
-                </Group>
-                <Button fullWidth mt="xl" onClick={login}>
+
+                <Button fullWidth mt="xl" onClick={() => login({
+                    name: nameRef.current?.value || "",
+                    password: passwordRef.current?.value || ""
+                })}>
                     Sign in
                 </Button>
             </Paper>

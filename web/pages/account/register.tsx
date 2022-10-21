@@ -1,67 +1,62 @@
 import {
     TextInput,
     PasswordInput,
-    Checkbox,
     Anchor,
     Paper,
     Title,
     Text,
     Container,
-    Group,
-    Button,
+    Button, LoadingOverlay, Alert,
 } from '@mantine/core';
 import Link from "next/link";
-import {NextLink} from "@mantine/next";
 import {useRef} from "react";
+import {useRegisterMutation} from "../../src/api/auth";
+import {IconAlertCircle} from "@tabler/icons";
 
 const Register = () => {
     const nameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
-    function register() {
-        fetch("/api/auth/public/register", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: nameRef.current?.value,
-                password: passwordRef.current?.value,
-            })
-        }).then(response => response.json()).then(data => {
-            console.log(data)
-        })
-    }
-
+    // Mutations
+    const [register, result] = useRegisterMutation()
 
     return (
         <Container size={420} my={40}>
+            <LoadingOverlay visible={result.isLoading} overlayBlur={2}/>
+
             <Title
                 align="center"
                 sx={(theme) => ({fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900})}
             >
-                Hello, great to see you!
+                New here?
             </Title>
             <Text color="dimmed" size="sm" align="center" mt={5}>
-                Do already have an account?{' '}
+                Already have an account?{' '}
+
                 <Link href={"/account/login"}>
                     <Anchor component={"a"} size="sm">
-                        Login
+                        Sign In
                     </Anchor>
                 </Link>
             </Text>
 
-            <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+            {result.error ? (
+                <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
+                    Something went wrong. Please try again, or contact an administrator.
+                </Alert>) : ""
+            }
+
+            <Paper withBorder shadow="md" p={30} mt={30} radius="md" style={{position: "relative"}}>
+                <LoadingOverlay visible={result.isLoading} overlayBlur={2}/>
+
                 <TextInput label="Name" placeholder="John Doe" required ref={nameRef}/>
                 <PasswordInput label="Password" placeholder="Your password" required mt="md" ref={passwordRef}/>
-                <Group position="apart" mt="md">
-                    <Checkbox label="Remember me"/>
-                    <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
-                        Forgot password?
-                    </Anchor>
-                </Group>
-                <Button fullWidth mt="xl" onClick={register}>
-                    Sign in
+
+                <Button fullWidth mt="xl" onClick={() => register({
+                    name: nameRef.current?.value || "",
+                    password: passwordRef.current?.value || ""
+                })}>
+                    Sign up
                 </Button>
             </Paper>
         </Container>
