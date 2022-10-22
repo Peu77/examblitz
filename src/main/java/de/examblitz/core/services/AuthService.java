@@ -31,7 +31,11 @@ public class AuthService {
      * @param request Data needed to insert the entity
      * @return The created entity
      */
-    public UserPrincipal createUser(AuthorizeUserDto request) {
+    public Optional<UserPrincipal> createUser(AuthorizeUserDto request) {
+        // Check if the user already exists
+        if (userRepository.existsByName(request.name()))
+            return Optional.empty();
+
         UserModel userModel = new UserModel();
 
         userModel.setName(request.name());
@@ -40,12 +44,13 @@ public class AuthService {
 
         userRepository.save(userModel);
 
-        return new UserPrincipal(userModel);
+        return Optional.of(new UserPrincipal(userModel));
     }
 
     /**
      * This authorizes a user and generates a token
-     * @param request The information provided
+     *
+     * @param request   The information provided
      * @param principal The user-principal, which contains the database-entry
      * @return Either the String or an empty Optional
      */
@@ -65,6 +70,7 @@ public class AuthService {
 
     /**
      * Allows for access to the currently logged-in user(-model)
+     *
      * @return The User from the database
      */
     public UserModel getCurrentUser() {

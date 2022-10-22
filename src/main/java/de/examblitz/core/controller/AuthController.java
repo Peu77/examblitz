@@ -23,14 +23,20 @@ public class AuthController {
 
     @RequestMapping(value = "/public/register", method = RequestMethod.POST)
     public ResponseEntity<?> saveUser(HttpServletResponse response, @RequestBody AuthorizeUserDto request) {
-        var user = authService.createUser(request);
-        var token = authService.createUserToken(request, user);
+        var userOptional = authService.createUser(request);
 
-        if (token.isEmpty())
+        // If the user already exists with the same name
+        if (userOptional.isEmpty())
             return ResponseEntity.badRequest().build();
 
+        var tokenOptional = authService.createUserToken(request, userOptional.get());
+
+        // When the token could not be generated
+        if (tokenOptional.isEmpty())
+            return ResponseEntity.internalServerError().build();
+
         // Create the AUTH_TOKEN Cookie
-        var cookie = new Cookie(JwtTokenUtil.COOKIE_NAME, token.get());
+        var cookie = new Cookie(JwtTokenUtil.COOKIE_NAME, tokenOptional.get());
 
         // Cookie Settings
         cookie.setHttpOnly(true);

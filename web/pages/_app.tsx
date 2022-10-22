@@ -1,17 +1,18 @@
+import '../styles/globals.css'
+import type {AppProps} from 'next/app'
+import {MantineProvider} from "@mantine/core";
 import {Provider} from "react-redux";
-import {store} from "../src/store"
-import {AppProps} from "next/app";
-import { MantineProvider } from "@mantine/core";
+import {store} from "../src/store";
 
-function Examblitz({Component, pageProps}: AppProps) {
 
-    return (
-        <Provider store={store}>
-            <MantineProvider theme={{colorScheme: 'dark'}} withGlobalStyles withNormalizeCSS>
+function MyApp({Component, pageProps}: AppProps) {
+    return <>
+        <MantineProvider theme={{colorScheme: 'dark'}} withGlobalStyles withNormalizeCSS>
+            <Provider store={store}>
                 <Component {...pageProps} />
-            </MantineProvider>
-        </Provider>
-    );
+            </Provider>
+        </MantineProvider>
+    </>
 }
 
-export default Examblitz;
+export default MyApp
