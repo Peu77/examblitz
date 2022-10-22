@@ -1,11 +1,9 @@
-import '../styles/globals.css'
 import type {AppProps} from 'next/app'
 import {MantineProvider} from "@mantine/core";
 import {Provider} from "react-redux";
 import {store} from "../src/store";
 
-
-function MyApp({Component, pageProps}: AppProps) {
+function Examblitz({Component, pageProps}: AppProps) {
     return <>
         <MantineProvider theme={{colorScheme: 'dark'}} withGlobalStyles withNormalizeCSS>
             <Provider store={store}>
@@ -15,4 +13,4 @@ function MyApp({Component, pageProps}: AppProps) {
     </>
 }
 
-export default MyApp
+export default Examblitz

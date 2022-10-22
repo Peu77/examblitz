@@ -3,7 +3,7 @@ import type {TokenResponse, User} from '../types'
 
 export const authApi = createApi({
     reducerPath: 'pokemonApi',
-    baseQuery: fetchBaseQuery({baseUrl: 'http://localhost:8080/auth/'}),
+    baseQuery: fetchBaseQuery({baseUrl: 'http://localhost:8080/auth/', credentials: "include"}),
     endpoints: (builder) => ({
         register: builder.mutation<User, { name: string, password: string }>({
             query: ({name, password}) => ({
