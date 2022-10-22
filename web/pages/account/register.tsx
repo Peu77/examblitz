@@ -10,20 +10,18 @@ import {
 } from '@mantine/core';
 import Link from "next/link";
 import {useRef} from "react";
-import {useRegisterMutation} from "../../src/api/auth";
 import {IconAlertCircle} from "@tabler/icons";
+import {useRegister} from "../../src/api";
 
 const Register = () => {
     const nameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
     // Mutations
-    const [register, result] = useRegisterMutation()
+    const {fn: register, result} = useRegister()
 
     return (
         <Container size={420} my={40}>
-            <LoadingOverlay visible={result.isLoading} overlayBlur={2}/>
-
             <Title
                 align="center"
                 sx={(theme) => ({fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900})}
@@ -49,7 +47,7 @@ const Register = () => {
             }
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md" style={{position: "relative"}}>
-                <LoadingOverlay visible={result.isLoading} overlayBlur={2}/>
+                <LoadingOverlay visible={result.loading} overlayBlur={2}/>
 
                 <TextInput label="Name" placeholder="John Doe" required ref={nameRef}/>
                 <PasswordInput label="Password" placeholder="Your password" required mt="md" ref={passwordRef}/>

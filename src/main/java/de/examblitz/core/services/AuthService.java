@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Component
 @AllArgsConstructor
@@ -41,6 +42,7 @@ public class AuthService {
         userModel.setName(request.name());
         userModel.setPassword(BCrypt.hashpw(request.password(), BCrypt.gensalt()));
         userModel.setAuthorities(List.of("ROLE_USER"));
+        userModel.setAccessibleTasks(Set.of());
 
         userRepository.save(userModel);
 

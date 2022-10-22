@@ -10,15 +10,15 @@ import {
 } from '@mantine/core';
 import {IconAlertCircle} from '@tabler/icons';
 import Link from "next/link";
-import {useMemo, useRef} from "react";
-import {useLoginMutation} from "../../src/api/auth";
+import {useRef} from "react";
+import {useLogin} from "../../src/api";
 
 const Login = () => {
     const nameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
     // Mutations
-    const [login, result] = useLoginMutation()
+    const {fn: login, result} = useLogin()
 
     return (
         <Container size={420} my={40}>
@@ -28,6 +28,7 @@ const Login = () => {
             >
                 Welcome back!
             </Title>
+
             <Text color="dimmed" size="sm" align="center" mt={5}>
                 Do not have an account yet?{' '}
 
@@ -38,7 +39,6 @@ const Login = () => {
                 </Link>
             </Text>
 
-
             {
                 result.error && (
                     <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
@@ -48,7 +48,7 @@ const Login = () => {
             }
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md" style={{position: "relative"}}>
-                <LoadingOverlay visible={result.isLoading} overlayBlur={2}/>
+                <LoadingOverlay visible={result.loading} overlayBlur={2}/>
 
                 <TextInput label="Name" placeholder="John Doe" required ref={nameRef}/>
                 <PasswordInput label="Password" placeholder="Your password" required mt="md" ref={passwordRef}/>
