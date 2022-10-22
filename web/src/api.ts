@@ -23,19 +23,20 @@ function createRequestHook<T extends unknown>(fn: (...args: any) => any): {
         data: ReturnType<typeof fn> | null
     }
 } {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [data, setData] = useState<ReturnType<typeof fn> | null>(null)
 
     return {
         fn: (args: T) => {
-            fn.apply(args).then((response: Response) => {
+            fn(args).then((response: Response) => {
                 setLoading(false)
 
                 if (!response.ok)
                     return setError(true);
 
-                response.json().then(json => setData(json))
+                if (response.headers.get("Content-Length") !== "0")
+                    response.json().then(json => setData(json))
             });
         },
         result: {loading, error, data}
@@ -47,9 +48,12 @@ function createRequestHook<T extends unknown>(fn: (...args: any) => any): {
  * @param z The body.
  */
 export async function login(z: { name: string, password: string }) {
-    return fetch("/api/public/login", {
+    return fetch("/api/auth/public/login", {
         ...BASE_INIT,
         method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify(z)
     })
 }
@@ -61,7 +65,7 @@ export const useLogin = () => createRequestHook<{ name: string, password: string
  * @param z The body.
  */
 export async function register(z: { name: string, password: string }) {
-    return fetch("/api/public/register", {
+    return fetch("/api/auth/public/register", {
         ...BASE_INIT,
         method: "POST",
         body: JSON.stringify(z)
@@ -69,3 +73,12 @@ export async function register(z: { name: string, password: string }) {
 }
 
 export const useRegister = () => createRequestHook<{ name: string, password: string }>(register)
+
+export async function me(init?: RequestInit) {
+    return fetch("/api/auth/me", {
+        ...BASE_INIT,
+        ...init
+    })
+}
+
+export const useMe = () => createRequestHook<unknown>(me)

@@ -13,8 +13,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
-@CrossOrigin
 @AllArgsConstructor
+@CrossOrigin
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -42,6 +42,7 @@ public class AuthController {
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setMaxAge((int) JwtTokenUtil.JWT_TOKEN_VALIDITY);
+        cookie.setPath("/");
 
         // Add it to the response
         response.addCookie(cookie);
@@ -64,6 +65,7 @@ public class AuthController {
         cookie.setHttpOnly(true);
         cookie.setSecure(true);
         cookie.setMaxAge((int) JwtTokenUtil.JWT_TOKEN_VALIDITY);
+        cookie.setPath("/");
 
         // Add it to the response
         response.addCookie(cookie);

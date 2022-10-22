@@ -9,5 +9,4 @@ public class ExamblitzApplication {
     public static void main(String[] args) {
         SpringApplication.run(ExamblitzApplication.class, args);
     }
-
 }
