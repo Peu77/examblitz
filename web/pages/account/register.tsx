@@ -40,10 +40,12 @@ const Register = () => {
                 </Link>
             </Text>
 
-            {result.error ? (
-                <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
-                    Something went wrong. Please try again, or contact an administrator.
-                </Alert>) : ""
+            {
+                result.error && (
+                    <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
+                        Something went wrong. Please try again, or contact an administrator.
+                    </Alert>
+                )
             }
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md" style={{position: "relative"}}>

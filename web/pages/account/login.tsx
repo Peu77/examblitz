@@ -10,7 +10,7 @@ import {
 } from '@mantine/core';
 import {IconAlertCircle} from '@tabler/icons';
 import Link from "next/link";
-import {useRef} from "react";
+import {useMemo, useRef} from "react";
 import {useLoginMutation} from "../../src/api/auth";
 
 const Login = () => {
@@ -38,10 +38,13 @@ const Login = () => {
                 </Link>
             </Text>
 
-            {result.error ? (
-                <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
-                    Authentication Failed. Please check your credentials, otherwise contact an administrator.
-                </Alert>) : ""
+
+            {
+                result.error && (
+                    <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
+                        Authentication Failed. Please check your credentials, otherwise contact an administrator.
+                    </Alert>
+                )
             }
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md" style={{position: "relative"}}>
