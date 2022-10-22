@@ -12,13 +12,20 @@ import {IconAlertCircle} from '@tabler/icons';
 import Link from "next/link";
 import {useRef} from "react";
 import {useLogin} from "../../src/api";
+import {useRouter} from "next/router";
 
 const Login = () => {
     const nameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
+    // Used to redirect to the dashboard
+    const router = useRouter();
+
     // Mutations
     const {fn: login, result} = useLogin()
+
+    if (result.done)
+        router.push("/dashboard").then(_ => ({}))
 
     return (
         <Container size={420} my={40}>

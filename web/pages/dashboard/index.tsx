@@ -9,23 +9,24 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     })
 
-    const error = !response.ok
-    let user = null
+    if (!response.ok)
+        return {
+            redirect: {
+                destination: "/account/login",
+                permanent: false
+            }
+        }
 
-    if (!error) {
-        user = await response.json()
-    }
+    let user = await response.json();
 
     return {
         props: {
-            error,
             user
         },
     }
 }
 
 interface DashboardProps {
-    error: boolean,
     user: User
 }
 
@@ -33,9 +34,7 @@ interface DashboardProps {
 const Dashboard = (props: DashboardProps) => {
     return (
         <>
-            <h1>error: {props.error.toString()}</h1>
-            <h1 onClick={() => {
-            }}>name: {props.user.name}</h1>
+            <h1>name: {props.user.name}</h1>
         </>
     )
 }

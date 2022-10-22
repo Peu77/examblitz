@@ -12,13 +12,20 @@ import Link from "next/link";
 import {useRef} from "react";
 import {IconAlertCircle} from "@tabler/icons";
 import {useRegister} from "../../src/api";
+import {useRouter} from "next/router";
 
 const Register = () => {
     const nameRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
+    // Used to redirect to the dashboard
+    const router = useRouter();
+
     // Mutations
     const {fn: register, result} = useRegister()
+
+    if (result.done)
+        router.push("/dashboard").then(_ => ({}))
 
     return (
         <Container size={420} my={40}>
