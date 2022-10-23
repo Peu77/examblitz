@@ -1,5 +1,6 @@
 package de.examblitz.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.examblitz.core.utils.StringListConverter;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,6 +27,7 @@ public class QuestionModel {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "test_id", nullable = false)
+    @JsonIgnore
     private TestModel test;
 
     @Column(name = "description", nullable = false)

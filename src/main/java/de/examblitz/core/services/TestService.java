@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -22,6 +23,7 @@ public class TestService {
     /**
      * This generates a random ID for a test, and checks whether this id already exists.
      * If so, it generates a new one.
+     *
      * @return A random ID.
      */
     public String getValidId() {
@@ -35,6 +37,7 @@ public class TestService {
 
     /**
      * This creates a new test.
+     *
      * @param data The data required to create a new test.
      * @return The test that has been created.
      */
@@ -64,6 +67,15 @@ public class TestService {
         });
 
         return model;
+    }
+
+    /**
+     * This returns all tests one has access to.
+     *
+     * @return All tests.
+     */
+    public List<TestModel> listTests(UserModel user) {
+        return testRepository.listTestsForUser(user.getId().toString());
     }
 
 }

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @AllArgsConstructor
 @RequestMapping("/test")
@@ -26,6 +24,13 @@ public class TestController {
         var model = testService.createTest(request, authService.getCurrentUser());
 
         return ResponseEntity.ok(new TestIdDto(model.getId()));
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ResponseEntity<?> listTest() {
+        var models = testService.listTests(authService.getCurrentUser());
+
+        return ResponseEntity.ok(models);
     }
 
 }
