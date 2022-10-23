@@ -7,7 +7,40 @@ import DashboardLayout from "../../components/layouts/dashboardLayout";
 import {useRouter} from "next/router";
 import Home from "../../components/dashboard/subs/Home";
 import Tests from "../../components/dashboard/subs/Tests";
-import {any} from "prop-types";
+
+interface SubResponse {
+    props: any
+}
+
+interface Sub {
+    name: string
+    component: any,
+    serverSideFunction: (content: GetServerSidePropsContext) => Promise<SubResponse>
+}
+
+
+const subs: Sub[] = [
+    {
+        name: "home",
+        component: Home,
+        serverSideFunction: async (context: GetServerSidePropsContext) => {
+            return {
+                props: {
+                    homeistcool: true
+                }
+            }
+        },
+    },
+    {
+        name: "tests",
+        component: Tests,
+        serverSideFunction: async (context: GetServerSidePropsContext) => {
+            return {
+                props: {}
+            }
+        },
+    }
+]
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const response = await me({
@@ -24,38 +57,41 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             }
         }
 
+    const sub = subs.find(sub => sub.name === context.query.sub)
+    let subResponse: SubResponse = sub ? await sub.serverSideFunction(context) : {props: {}}
+
     let user = await response.json();
     return {
         props: {
-            user
+            user,
+            subProps: {
+                ...subResponse.props
+            }
         },
     }
 }
 
 interface DashboardProps {
-    user: User
+    user: User,
+    subProps: any
 }
 
 const Dashboard = (props: DashboardProps) => {
     const router = useRouter();
-
     const setUser = useUserStore((state: any) => state.setUser)
-    setUser(props.user)
+    useEffect(() => {
+        setUser(props.user)
+    }, [])
 
-    const subs = {
-        "home": <Home/>,
-        "tests": <Tests/>
-    }
 
     const sub = useMemo(() => {
-        // @ts-ignore
-        return subs[router.query.sub as string] || <Home/>
+        return subs.find(sub => sub.name === router.query.sub)
     }, [router])
 
     return (
         <div>
             <DashboardLayout>
-                {sub}
+                {sub ? <sub.component {...props.subProps}/> : <></>}
             </DashboardLayout>
         </div>
     )

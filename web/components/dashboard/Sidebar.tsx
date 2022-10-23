@@ -62,7 +62,6 @@ function NavbarLink({icon: Icon, label, active, onClick}: NavbarLinkProps) {
 
 export default function NavbarMinimal() {
     const router = useRouter();
-
     const links =  linkData.map(link => (
             <NavbarLink
                 {...link}
