@@ -5,6 +5,7 @@ import {
     IconLogout, IconBuildingLighthouse, IconAB2,
 } from '@tabler/icons';
 import {useRouter} from "next/router";
+import {useMemo} from "react";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -40,8 +41,8 @@ interface NavbarLinkProps {
  * Every clickable link.
  */
 const linkData = [
-    {icon: IconHome2, label: 'Home', url: "/dashboard/home"},
-    {icon: IconAB2, label: 'Tests', url: "/dashboard/tests"},
+    {icon: IconHome2, label: 'home', url: "/dashboard/home"},
+    {icon: IconAB2, label: 'tests', url: "/dashboard/tests"},
 ];
 
 /**
@@ -62,14 +63,15 @@ function NavbarLink({icon: Icon, label, active, onClick}: NavbarLinkProps) {
 export default function NavbarMinimal() {
     const router = useRouter();
 
-    const links = linkData.map(link => (
-        <NavbarLink
-            {...link}
-            key={link.label}
-            active={router.pathname === link.url}
-            onClick={() => router.push(link.url).then(_ => ({}))}
-        />
-    ));
+    const links =  linkData.map(link => (
+            <NavbarLink
+                {...link}
+                key={link.label}
+                active={router.query.sub === link.label}
+                onClick={() => router.push(link.url).then(_ => ({}))}
+            />
+        ));
+
 
     return (
         <Navbar height={"100vh"} width={{base: 80}} p="md">

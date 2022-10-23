@@ -7,6 +7,7 @@ import DashboardLayout from "../../components/layouts/dashboardLayout";
 import {useRouter} from "next/router";
 import Home from "../../components/dashboard/subs/Home";
 import Tests from "../../components/dashboard/subs/Tests";
+import {any} from "prop-types";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const response = await me({
