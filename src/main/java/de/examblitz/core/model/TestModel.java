@@ -19,7 +19,7 @@ public class TestModel {
     /**
      * Whether one needs to have access to the task or not
      */
-    enum TestVisibility {
+    public enum TestVisibility {
         PUBLIC,
         PRIVATE
     }

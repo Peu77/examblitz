@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @AllArgsConstructor
-@CrossOrigin
 @RequestMapping("/auth")
 public class AuthController {
 
