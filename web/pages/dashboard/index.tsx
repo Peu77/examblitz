@@ -1,42 +1,17 @@
-import {User} from "../../src/types";
 import {GetServerSidePropsContext} from "next";
 import {me} from "../../src/api";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const response = await me({
-        headers: {
-            cookie: context.req.headers.cookie || ""
-        }
-    })
-
-    if (!response.ok)
-        return {
-            redirect: {
-                destination: "/account/login",
-                permanent: false
-            }
-        }
-
-    let user = await response.json();
-
     return {
-        props: {
-            user
-        },
+        redirect: {
+            destination: "/dashboard/home",
+            permanent: false
+        }
     }
 }
 
-interface DashboardProps {
-    user: User
+const Index = () => {
+    return <></>
 }
 
-
-const Dashboard = (props: DashboardProps) => {
-    return (
-        <div>
-            <h1>name: {props.user.name}</h1>
-        </div>
-    )
-}
-
-export default Dashboard
+export default Index

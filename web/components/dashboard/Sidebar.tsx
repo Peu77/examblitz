@@ -40,7 +40,7 @@ interface NavbarLinkProps {
  * Every clickable link.
  */
 const linkData = [
-    {icon: IconHome2, label: 'Home', url: "/dashboard"},
+    {icon: IconHome2, label: 'Home', url: "/dashboard/home"},
     {icon: IconAB2, label: 'Tests', url: "/dashboard/tests"},
 ];
 
