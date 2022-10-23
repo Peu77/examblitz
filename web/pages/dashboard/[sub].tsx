@@ -79,8 +79,9 @@ interface DashboardProps {
 const Dashboard = (props: DashboardProps) => {
     const router = useRouter();
     const setUser = useUserStore((state: any) => state.setUser)
-    useEffect(() => {
+    const isUserSet = useMemo(() => {
         setUser(props.user)
+        return true
     }, [])
 
 
@@ -91,7 +92,7 @@ const Dashboard = (props: DashboardProps) => {
     return (
         <div>
             <DashboardLayout>
-                {sub ? <sub.component {...props.subProps}/> : <></>}
+                {sub && isUserSet ? <sub.component {...props.subProps}/> : <></>}
             </DashboardLayout>
         </div>
     )
