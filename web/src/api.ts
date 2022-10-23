@@ -35,12 +35,14 @@ function createRequestHook<T extends unknown>(fn: (...args: any) => any): {
 
     return {
         fn: (args: T) => {
+            setLoading(true);
+            setError(true);
             fn(args).then((response: Response) => {
                 setLoading(false)
                 setDone(true);
 
-                if (!response.ok)
-                    return setError(true);
+                if (response.ok)
+                    return setError(false);
 
                 if (response.headers.get("Content-Length") !== "0")
                     response.json().then(json => setData(json))

@@ -1,6 +1,7 @@
 import {User} from "../../src/types";
 import {GetServerSidePropsContext} from "next";
 import {me} from "../../src/api";
+import style from "./dashboard.module.scss"
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const response = await me({
@@ -33,9 +34,9 @@ interface DashboardProps {
 
 const Dashboard = (props: DashboardProps) => {
     return (
-        <>
+        <div className={style.container}>
             <h1>name: {props.user.name}</h1>
-        </>
+        </div>
     )
 }
 

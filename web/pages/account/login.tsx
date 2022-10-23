@@ -10,7 +10,7 @@ import {
 } from '@mantine/core';
 import {IconAlertCircle} from '@tabler/icons';
 import Link from "next/link";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import {useLogin} from "../../src/api";
 import {useRouter} from "next/router";
 
@@ -24,8 +24,18 @@ const Login = () => {
     // Mutations
     const {fn: login, result} = useLogin()
 
-    if (result.done)
-        router.push("/dashboard").then(_ => ({}))
+    useEffect(() => {
+        router.prefetch("/dashboard").then(_ => ({}))
+    })
+
+
+    useEffect(() => {
+        console.log(result.error)
+
+        if (result.done && !result.error)
+            router.push("/dashboard").then(_ => ({}))
+    }, [result.loading])
+
 
     return (
         <Container size={420} my={40}>
