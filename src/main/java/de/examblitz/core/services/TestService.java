@@ -74,7 +74,7 @@ public class TestService {
      *
      * @return All tests.
      */
-    public List<TestModel> listTests(UserModel user) {
+    public List<TestModel> findAllTests(UserModel user) {
         return testRepository.listTestsForUser(user.getId().toString());
     }
 

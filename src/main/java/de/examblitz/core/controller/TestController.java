@@ -28,7 +28,7 @@ public class TestController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<?> listTest() {
-        var models = testService.listTests(authService.getCurrentUser());
+        var models = testService.findAllTests(authService.getCurrentUser());
 
         return ResponseEntity.ok(models);
     }
