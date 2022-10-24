@@ -10,6 +10,6 @@ public interface TestRepository extends JpaRepository<TestModel, String> {
     @Override
     boolean existsById(String s);
 
-    @Query(value = "SELECT * from tests where visibility = 'PUBLIC' or (select COUNT(*) from allowed_users where CAST(allowed_users.test_id AS varchar(255)) = tests.id and allowed_users.user_id = ?1) = 1;", nativeQuery = true)
+    @Query(value = "SELECT * from tests where visibility = 'PUBLIC' or (select COUNT(*) from allowed_users where allowed_users.test_id = tests.id and CAST(allowed_users.user_id AS varchar(255)) = ?1) = 1;", nativeQuery = true)
     List<TestModel> listTestsForUser(String uuid);
 }

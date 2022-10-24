@@ -51,8 +51,8 @@ public class TestModel {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "allowed_users",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "test_id")})
+            joinColumns = {@JoinColumn(name = "test_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private Set<UserModel> allowedUsers = new HashSet<>();
 
 }
