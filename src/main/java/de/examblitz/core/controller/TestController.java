@@ -1,9 +1,6 @@
 package de.examblitz.core.controller;
 
-import de.examblitz.core.dto.CreateTestDto;
-import de.examblitz.core.dto.SanitizedQuestionDto;
-import de.examblitz.core.dto.SanitizedTestDto;
-import de.examblitz.core.dto.TestIdDto;
+import de.examblitz.core.dto.*;
 import de.examblitz.core.services.AuthService;
 import de.examblitz.core.services.TestService;
 import lombok.AllArgsConstructor;
@@ -48,7 +45,8 @@ public class TestController {
     public ResponseEntity<?> deleteTest(@PathVariable("id") String id) {
         var success = testService.deleteTest(id, authService.getCurrentUser());
 
-        return (success ? ResponseEntity.ok() : ResponseEntity.badRequest()).build();
+        return (success ? ResponseEntity.accepted().body(new TestDeleteDto(id)) :
+                ResponseEntity.badRequest().build());
     }
 
 }

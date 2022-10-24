@@ -3,6 +3,7 @@ import {Test} from "../../../src/types/test";
 import {openConfirmModal} from "@mantine/modals";
 import {useDeleteTest} from "../../../src/requests/testRequests";
 import {showNotification} from "@mantine/notifications";
+import {useEffect, useState} from "react";
 
 interface HomeProps {
     tests: Test[]
@@ -10,6 +11,7 @@ interface HomeProps {
 
 export default function Home(props: HomeProps) {
     const {fn: deleteTest, result} = useDeleteTest()
+    const [tests, setTests] = useState(props.tests)
 
     const openModal = (testId: string, title: string) => openConfirmModal({
         title: 'Please confirm your action',
@@ -30,6 +32,7 @@ export default function Home(props: HomeProps) {
                 message: 'You deleted the test ' + title,
                 color: "green",
             })
+            setTests(tests.filter(test => test.id !== testId))
         },
     });
 
@@ -46,7 +49,7 @@ export default function Home(props: HomeProps) {
             <Grid style={{
                 margin: 0
             }}>
-                {props.tests.map((test, i_) => (
+                {tests.map((test, i_) => (
                     <Grid.Col md={6} lg={8} key={test.id}>
                         <Card
                             shadow="sm"
