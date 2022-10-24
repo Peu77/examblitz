@@ -45,20 +45,24 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         var jwtToken = tokenCookie.get().getValue();
-        var username = jwtTokenUtil.getClaimFromToken(jwtToken, Claims::getSubject);
 
-        UserPrincipal principal = this.principalService.loadUserByUsername(username);
+        try {
+            var username = jwtTokenUtil.getClaimFromToken(jwtToken, Claims::getSubject);
 
-        // Return, if the token isn't a valid one.
-        if (!jwtTokenUtil.validateToken(jwtToken, principal)) {
-            filterChain.doFilter(request, response);
-            return;
+            UserPrincipal principal = this.principalService.loadUserByUsername(username);
+
+            // Return, if the token isn't a valid one.
+            if (!jwtTokenUtil.validateToken(jwtToken, principal)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        } catch (Exception ignored) {
         }
-
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, null, principal.getAuthorities());
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         filterChain.doFilter(request, response);
     }
