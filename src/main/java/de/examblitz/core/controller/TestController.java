@@ -1,6 +1,8 @@
 package de.examblitz.core.controller;
 
 import de.examblitz.core.dto.CreateTestDto;
+import de.examblitz.core.dto.SanitizedQuestionDto;
+import de.examblitz.core.dto.SanitizedTestDto;
 import de.examblitz.core.dto.TestIdDto;
 import de.examblitz.core.services.AuthService;
 import de.examblitz.core.services.TestService;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -30,7 +34,17 @@ public class TestController {
     public ResponseEntity<?> listTest() {
         var models = testService.findAllTests(authService.getCurrentUser());
 
-        return ResponseEntity.ok(models);
+        return ResponseEntity.ok(
+                models.stream().map(model -> {
+                    var sanitizedQuestions = model.getQuestions().stream().map(questionModel -> new SanitizedQuestionDto(
+                            questionModel.getId(), questionModel.getDescription(),
+                            questionModel.getType(), questionModel.getOptions())).collect(Collectors.toList());
+
+                    return new SanitizedTestDto(
+                            model.getId(), model.getTitle(), model.getDescription(),
+                            model.getCreatedBy().getName(), model.getCreatedAt(),
+                            sanitizedQuestions);
+                }));
     }
 
 }
