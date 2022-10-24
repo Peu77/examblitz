@@ -19,7 +19,7 @@ const BASE_URL = process.env.API_URL ?? "/api"
  * to emit the result (e.g. data)
  * @param fn The function to be converted
  */
-function useCreateRequestHook<T extends unknown>(fn: (...args: any) => any): {
+export function useCreateRequestHook<T extends unknown>(fn: (...args: any) => any): {
     fn: (args: T) => void,
     result: {
         loading: boolean,
@@ -58,7 +58,7 @@ function useCreateRequestHook<T extends unknown>(fn: (...args: any) => any): {
  * @param method The method the fetch will use.
  * @param init Make the request more specific.
  */
-function createFetchRequest(url: string, method: string, init?: RequestInit) {
+export function createFetchRequest(url: string, method: string, init?: RequestInit) {
     return fetch(BASE_URL + url, merge({
         ...BASE_INIT,
         method: method,
@@ -73,7 +73,7 @@ function createFetchRequest(url: string, method: string, init?: RequestInit) {
  * @param body The body that we will transmit as json.
  * @param init Make the request more specific.
  */
-function createFetchRequestWithBody(url: string, method: string, body: any, init?: RequestInit) {
+export function createFetchRequestWithBody(url: string, method: string, body: any, init?: RequestInit) {
     return fetch(BASE_URL + url, merge({
         ...BASE_INIT,
         method: method,
@@ -81,37 +81,3 @@ function createFetchRequestWithBody(url: string, method: string, body: any, init
         body: JSON.stringify(body)
     }, init ?? {}))
 }
-
-/**
- * This adds a cookie to authorize
- * @param z The body.
- * @param init Make the request more specific.
- */
-export const login = async (z: { name: string, password: string }, init?: RequestInit) =>
-    createFetchRequestWithBody("/auth/public/login", "POST", z, init);
-
-export const useLogin = () => useCreateRequestHook<{ name: string, password: string }>(login)
-
-/**
- * This creates a new user, and adds the cookie
- * @param z The body.
- * @param init Make the request more specific.
- */
-export const register = async (z: { name: string, password: string }, init?: RequestInit) =>
-    createFetchRequestWithBody("/auth/public/register", "POST", z, init);
-
-export const useRegister = () => useCreateRequestHook<{ name: string, password: string }>(register)
-
-/**
- * The returns information about the current user
- * @param init Make the request more specific.
- */
-export const me = async (init?: RequestInit) =>
-    createFetchRequest("/auth/me", "POST", init);
-
-export const useMe = () => useCreateRequestHook<unknown>(me)
-
-export const findAllTests = async (init?: RequestInit) =>
-    createFetchRequest("/test/", "GET", init);
-
-export const useFindAllTests = () => useCreateRequestHook<unknown>(findAllTests)

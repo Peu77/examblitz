@@ -11,7 +11,7 @@ import {
 import {IconAlertCircle} from '@tabler/icons';
 import Link from "next/link";
 import {useEffect, useRef} from "react";
-import {useLogin} from "../../src/api";
+import {useLogin} from "../../src/requests/authRequests";
 import {useRouter} from "next/router";
 
 const Login = () => {

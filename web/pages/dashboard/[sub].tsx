@@ -1,6 +1,7 @@
 import useUserStore from "../../src/stores/UserStore";
 import {GetServerSidePropsContext} from "next";
-import {findAllTests, me} from "../../src/api";
+import {me} from "../../src/requests/userRequests";
+import {findAllTests} from "../../src/requests/testRequests";
 import {User} from "../../src/types";
 import React, {useEffect, useMemo} from "react";
 import DashboardLayout from "../../components/layouts/dashboardLayout";

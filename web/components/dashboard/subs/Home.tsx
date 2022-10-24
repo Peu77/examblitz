@@ -1,12 +1,15 @@
 import {Card, Image, Text, Badge, Button, Group, Grid} from '@mantine/core';
 import {Test} from "../../../src/types/test";
 import {openConfirmModal} from "@mantine/modals";
+import {useDeleteTest} from "../../../src/requests/testRequests";
 
 interface HomeProps {
     tests: Test[]
 }
 
 export default function Home(props: HomeProps) {
+    const {fn: deleteTest, result} = useDeleteTest()
+
     const openModal = (testId: string) => openConfirmModal({
         title: 'Please confirm your action',
         overlayBlur: 3,
@@ -19,7 +22,9 @@ export default function Home(props: HomeProps) {
         labels: {confirm: 'Confirm', cancel: 'Cancel'},
         onCancel: () => {
         },
-        onConfirm: () => console.log('Confirmed'),
+        onConfirm: () => {
+            deleteTest(testId)
+        },
     });
 
     if (!props.tests)

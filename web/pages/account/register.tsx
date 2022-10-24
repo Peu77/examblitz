@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import {useEffect, useRef} from "react";
 import {IconAlertCircle} from "@tabler/icons";
-import {useRegister} from "../../src/api";
+import {useRegister} from "../../src/requests/authRequests";
 import {useRouter} from "next/router";
 
 const Register = () => {
