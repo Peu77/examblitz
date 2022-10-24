@@ -13,6 +13,7 @@ import Link from "next/link";
 import {useEffect, useRef} from "react";
 import {useLogin} from "../../src/requests/authRequests";
 import {useRouter} from "next/router";
+import {showNotification} from "@mantine/notifications";
 
 const Login = () => {
     const nameRef = useRef<HTMLInputElement>(null);
@@ -30,8 +31,13 @@ const Login = () => {
 
 
     useEffect(() => {
-        if (result.done && !result.loading && !result.error)
+        if (result.done && !result.loading && !result.error) {
             router.push("/dashboard").then(_ => ({}))
+            showNotification({
+                title: 'Default notification',
+                message: 'Login successful in your account',
+            })
+        }
     }, [result.loading])
 
 

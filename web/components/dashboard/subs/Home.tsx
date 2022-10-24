@@ -1,7 +1,8 @@
-import {Card, Image, Text, Badge, Button, Group, Grid} from '@mantine/core';
+import {Card, Image, Text, Badge, Button, Group, Grid, CheckboxIcon} from '@mantine/core';
 import {Test} from "../../../src/types/test";
 import {openConfirmModal} from "@mantine/modals";
 import {useDeleteTest} from "../../../src/requests/testRequests";
+import {showNotification} from "@mantine/notifications";
 
 interface HomeProps {
     tests: Test[]
@@ -10,7 +11,7 @@ interface HomeProps {
 export default function Home(props: HomeProps) {
     const {fn: deleteTest, result} = useDeleteTest()
 
-    const openModal = (testId: string) => openConfirmModal({
+    const openModal = (testId: string, title: string) => openConfirmModal({
         title: 'Please confirm your action',
         overlayBlur: 3,
         children: (
@@ -24,6 +25,11 @@ export default function Home(props: HomeProps) {
         },
         onConfirm: () => {
             deleteTest(testId)
+            showNotification({
+                title: 'Notification',
+                message: 'You deleted the test ' + title,
+                color: "green",
+            })
         },
     });
 
@@ -31,9 +37,12 @@ export default function Home(props: HomeProps) {
         return <></>
     return (
         <>
-            <Text weight={800} size="xl" mt="lg">
-                You&apos;ve won a million dollars in cash!
-            </Text>
+            <Group>
+                <Text weight={800} size="xl" mt="lg">
+                    You&apos;ve won a million dollars in cash!
+                </Text>
+            </Group>
+
             <Grid style={{
                 margin: 0
             }}>
@@ -65,7 +74,7 @@ export default function Home(props: HomeProps) {
                                     Start
                                 </Button>
 
-                                <Button color="red" onClick={() => openModal(test.id)}>
+                                <Button color="red" onClick={() => openModal(test.id, test.title)}>
                                     Delete
                                 </Button>
                             </Group>
