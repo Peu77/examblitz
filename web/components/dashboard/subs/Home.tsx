@@ -1,12 +1,25 @@
 import {Card, Image, Text, Badge, Button, Group, Grid} from '@mantine/core';
 import {Test} from "../../../src/types/test";
+import {openConfirmModal} from "@mantine/modals";
 
 interface HomeProps {
     tests: Test[]
 }
 
 export default function Home(props: HomeProps) {
-    console.log("tests", props.tests)
+    const openModal = () => openConfirmModal({
+        title: 'Please confirm your action',
+        overlayBlur: 3,
+        children: (
+            <Text size="sm">
+                This action is so important that you are required to confirm it with a modal. Please click
+                one of these buttons to proceed.
+            </Text>
+        ),
+        labels: {confirm: 'Confirm', cancel: 'Cancel'},
+        onCancel: () => console.log('Cancel'),
+        onConfirm: () => console.log('Confirmed'),
+    });
 
     if (!props.tests)
         return <></>
@@ -19,7 +32,7 @@ export default function Home(props: HomeProps) {
                 margin: 0
             }}>
                 {props.tests.map((test, i_) => (
-                    <Grid.Col md={6} lg={3} key={test.id}>
+                    <Grid.Col md={6} lg={8} key={test.id}>
                         <Card
                             shadow="sm"
                             p="xl"
@@ -40,6 +53,16 @@ export default function Home(props: HomeProps) {
                             <Text mt="xs" color="dimmed" size="sm">
                                 Please click anywhere on this card to claim your reward, this is not a fraud, trust us
                             </Text>
+
+                            <Group mt="xl">
+                                <Button color="green">
+                                    Start
+                                </Button>
+
+                                <Button color="red" onClick={openModal}>
+                                    Delete
+                                </Button>
+                            </Group>
                         </Card>
                     </Grid.Col>
                 ))}

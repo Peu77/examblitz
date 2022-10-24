@@ -35,7 +35,6 @@ const subs: Sub[] = [
                 return {props: {}}
 
             const tests: Test[] = await response.json()
-
             return {
                 props: {
                     tests
