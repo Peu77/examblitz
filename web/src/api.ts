@@ -19,7 +19,7 @@ const BASE_URL = process.env.API_URL ?? "/api"
  * to emit the result (e.g. data)
  * @param fn The function to be converted
  */
-function createRequestHook<T extends unknown>(fn: (...args: any) => any): {
+function useCreateRequestHook<T extends unknown>(fn: (...args: any) => any): {
     fn: (args: T) => void,
     result: {
         loading: boolean,
@@ -90,7 +90,7 @@ function createFetchRequestWithBody(url: string, method: string, body: any, init
 export const login = async (z: { name: string, password: string }, init?: RequestInit) =>
     createFetchRequestWithBody("/auth/public/login", "POST", z, init);
 
-export const useLogin = () => createRequestHook<{ name: string, password: string }>(login)
+export const useLogin = () => useCreateRequestHook<{ name: string, password: string }>(login)
 
 /**
  * This creates a new user, and adds the cookie
@@ -100,7 +100,7 @@ export const useLogin = () => createRequestHook<{ name: string, password: string
 export const register = async (z: { name: string, password: string }, init?: RequestInit) =>
     createFetchRequestWithBody("/auth/public/register", "POST", z, init);
 
-export const useRegister = () => createRequestHook<{ name: string, password: string }>(register)
+export const useRegister = () => useCreateRequestHook<{ name: string, password: string }>(register)
 
 /**
  * The returns information about the current user
@@ -109,9 +109,9 @@ export const useRegister = () => createRequestHook<{ name: string, password: str
 export const me = async (init?: RequestInit) =>
     createFetchRequest("/auth/me", "POST", init);
 
-export const useMe = () => createRequestHook<unknown>(me)
+export const useMe = () => useCreateRequestHook<unknown>(me)
 
 export const findAllTests = async (init?: RequestInit) =>
     createFetchRequest("/test/", "GET", init);
 
-export const useFindAllTests = () => createRequestHook<unknown>(findAllTests)
+export const useFindAllTests = () => useCreateRequestHook<unknown>(findAllTests)

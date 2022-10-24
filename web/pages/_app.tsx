@@ -1,7 +1,5 @@
 import type {AppProps} from 'next/app'
 import {MantineProvider} from "@mantine/core";
-import DashboardLayout from "../components/layouts/dashboardLayout";
-import {useRouter} from "next/router";
 import React from "react";
 
 function Examblitz({Component, pageProps}: AppProps) {
