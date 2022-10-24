@@ -49,6 +49,9 @@ public class TestModel {
     @Column(name = "created_at")
     private Date createdAt = new Date();
 
+    @Column(name = "disabled")
+    private Boolean disabled = false;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "allowed_users",
             joinColumns = {@JoinColumn(name = "test_id")},

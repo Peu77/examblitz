@@ -81,7 +81,9 @@ public class TestService {
         if (!model.getCreatedBy().getId().equals(user.getId()))
             return false;
 
-        testRepository.delete(model);
+        model.setDisabled(true);
+
+        testRepository.save(model);
 
         return true;
     }
@@ -92,7 +94,7 @@ public class TestService {
      * @return All tests.
      */
     public List<TestModel> findAllTests(UserModel user) {
-        return testRepository.listTestsForUser(user.getId().toString());
+        return testRepository.findAllForUser(user.getId().toString());
     }
 
 }
