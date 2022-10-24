@@ -70,6 +70,23 @@ public class TestService {
     }
 
     /**
+     * this deletes a test.
+     */
+    public boolean deleteTest(String id, UserModel user) {
+        TestModel model = testRepository.findById(id).orElse(null);
+
+        if (model == null)
+            return false;
+
+        if (!model.getCreatedBy().getId().equals(user.getId()))
+            return false;
+
+        testRepository.delete(model);
+
+        return true;
+    }
+
+    /**
      * This returns all tests one has access to.
      *
      * @return All tests.

@@ -7,7 +7,7 @@ interface HomeProps {
 }
 
 export default function Home(props: HomeProps) {
-    const openModal = () => openConfirmModal({
+    const openModal = (testId: string) => openConfirmModal({
         title: 'Please confirm your action',
         overlayBlur: 3,
         children: (
@@ -17,7 +17,8 @@ export default function Home(props: HomeProps) {
             </Text>
         ),
         labels: {confirm: 'Confirm', cancel: 'Cancel'},
-        onCancel: () => console.log('Cancel'),
+        onCancel: () => {
+        },
         onConfirm: () => console.log('Confirmed'),
     });
 
@@ -51,7 +52,7 @@ export default function Home(props: HomeProps) {
                             </Text>
 
                             <Text mt="xs" color="dimmed" size="sm">
-                                Please click anywhere on this card to claim your reward, this is not a fraud, trust us
+                                {test.id}
                             </Text>
 
                             <Group mt="xl">
@@ -59,7 +60,7 @@ export default function Home(props: HomeProps) {
                                     Start
                                 </Button>
 
-                                <Button color="red" onClick={openModal}>
+                                <Button color="red" onClick={() => openModal(test.id)}>
                                     Delete
                                 </Button>
                             </Group>

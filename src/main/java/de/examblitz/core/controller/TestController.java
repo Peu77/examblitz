@@ -8,10 +8,7 @@ import de.examblitz.core.services.AuthService;
 import de.examblitz.core.services.TestService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
@@ -45,6 +42,13 @@ public class TestController {
                             model.getCreatedBy().getName(), model.getCreatedAt(),
                             sanitizedQuestions);
                 }));
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteTest(@PathVariable("id") String id) {
+        var success = testService.deleteTest(id, authService.getCurrentUser());
+
+        return (success ? ResponseEntity.ok() : ResponseEntity.badRequest()).build();
     }
 
 }
