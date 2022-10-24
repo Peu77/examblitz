@@ -110,3 +110,8 @@ export const me = async (init?: RequestInit) =>
     createFetchRequest("/auth/me", "POST", init);
 
 export const useMe = () => createRequestHook<unknown>(me)
+
+export const findAllTests = async (init?: RequestInit) =>
+    createFetchRequest("/test/", "GET", init);
+
+export const useFindAllTests = () => createRequestHook<unknown>(findAllTests)

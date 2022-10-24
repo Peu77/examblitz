@@ -1,12 +1,13 @@
 import useUserStore from "../../src/stores/UserStore";
 import {GetServerSidePropsContext} from "next";
-import {me} from "../../src/api";
+import {findAllTests, me} from "../../src/api";
 import {User} from "../../src/types";
 import React, {useEffect, useMemo} from "react";
 import DashboardLayout from "../../components/layouts/dashboardLayout";
 import {useRouter} from "next/router";
 import Home from "../../components/dashboard/subs/Home";
 import Tests from "../../components/dashboard/subs/Tests";
+import {Test} from "../../src/types/test";
 
 interface SubResponse {
     props: any
@@ -24,9 +25,20 @@ const subs: Sub[] = [
         name: "home",
         component: Home,
         serverSideFunction: async (context: GetServerSidePropsContext) => {
+            const response = await findAllTests({
+                headers: {
+                    cookie: context.req.headers.cookie || ""
+                }
+            })
+
+            if (!response.ok)
+                return {props: {}}
+
+            const tests: Test[] = await response.json()
+
             return {
                 props: {
-                    homeistcool: true
+                    tests
                 }
             }
         },

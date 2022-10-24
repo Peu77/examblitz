@@ -30,9 +30,7 @@ const Login = () => {
 
 
     useEffect(() => {
-        console.log(result.error)
-
-        if (result.done && !result.error)
+        if (result.done && !result.loading && !result.error)
             router.push("/dashboard").then(_ => ({}))
     }, [result.loading])
 
@@ -57,7 +55,7 @@ const Login = () => {
             </Text>
 
             {
-                result.error && (
+                result.error && !result.loading && (
                     <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
                         Authentication Failed. Please check your credentials, otherwise contact an administrator.
                     </Alert>

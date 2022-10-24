@@ -62,14 +62,14 @@ function NavbarLink({icon: Icon, label, active, onClick}: NavbarLinkProps) {
 
 export default function NavbarMinimal() {
     const router = useRouter();
-    const links =  linkData.map(link => (
-            <NavbarLink
-                {...link}
-                key={link.label}
-                active={router.query.sub === link.label}
-                onClick={() => router.push(link.url).then(_ => ({}))}
-            />
-        ));
+    const links = linkData.map(link => (
+        <NavbarLink
+            {...link}
+            key={link.label}
+            active={router.query.sub === link.label}
+            onClick={() => router.push(link.url).then(_ => ({}))}
+        />
+    ));
 
 
     return (

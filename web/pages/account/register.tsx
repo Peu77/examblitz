@@ -9,7 +9,7 @@ import {
     Button, LoadingOverlay, Alert,
 } from '@mantine/core';
 import Link from "next/link";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
 import {IconAlertCircle} from "@tabler/icons";
 import {useRegister} from "../../src/api";
 import {useRouter} from "next/router";
@@ -24,8 +24,14 @@ const Register = () => {
     // Mutations
     const {fn: register, result} = useRegister()
 
-    if (result.done)
-        router.push("/dashboard").then(_ => ({}))
+    useEffect(() => {
+        router.prefetch("/dashboard").then(_ => ({}))
+    })
+
+    useEffect(() => {
+        if (result.done && !result.loading && !result.error)
+            router.push("/dashboard").then(_ => ({}))
+    }, [result.loading])
 
     return (
         <Container size={420} my={40}>
@@ -46,7 +52,7 @@ const Register = () => {
             </Text>
 
             {
-                result.error && (
+                result.error && !result.loading && (
                     <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
                         Something went wrong. Please try again, or contact an administrator.
                     </Alert>
