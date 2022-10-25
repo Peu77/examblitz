@@ -36,13 +36,13 @@ export function useCreateRequestHook<T extends unknown>(fn: (...args: any) => an
     return {
         fn: (args: T) => {
             setLoading(true);
-            setError(true);
+            setError(false);
             fn(args).then((response: Response) => {
                 setLoading(false)
                 setDone(true);
 
-                if (response.ok)
-                    return setError(false);
+                if (!response.ok)
+                    return setError(true);
 
                 if (response.headers.get("Content-Length") !== "0")
                     response.json().then(json => setData(json))

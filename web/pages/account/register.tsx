@@ -52,7 +52,7 @@ const Register = () => {
             </Text>
 
             {
-                result.error && !result.loading && (
+                result.error && (
                     <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
                         Something went wrong. Please try again, or contact an administrator.
                     </Alert>

@@ -61,7 +61,7 @@ const Login = () => {
             </Text>
 
             {
-                result.error && !result.loading && (
+                result.error && (
                     <Alert icon={<IconAlertCircle size={16}/>} title="Bummer!" color="red">
                         Authentication Failed. Please check your credentials, otherwise contact an administrator.
                     </Alert>
