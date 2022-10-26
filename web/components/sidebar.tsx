@@ -5,7 +5,6 @@ import {
     IconLogout, IconBuildingLighthouse, IconAB2,
 } from '@tabler/icons';
 import {useRouter} from "next/router";
-import {useMemo} from "react";
 
 const useStyles = createStyles((theme) => ({
     link: {
@@ -29,7 +28,7 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-interface NavbarLinkProps {
+interface SidebarLinkProps {
     icon: TablerIcon;
     label: string;
     active?: boolean;
@@ -41,14 +40,14 @@ interface NavbarLinkProps {
  * Every clickable link.
  */
 const linkData = [
-    {icon: IconHome2, label: 'home', url: "/dashboard/home"},
+    {icon: IconHome2, label: 'home', url: "/dashboard"},
     {icon: IconAB2, label: 'tests', url: "/dashboard/tests"},
 ];
 
 /**
  * This is a clickable component, which will act as a link in the sidebar.
  */
-function NavbarLink({icon: Icon, label, active, onClick}: NavbarLinkProps) {
+function SidebarLink({icon: Icon, label, active, onClick}: SidebarLinkProps) {
     const {classes, cx} = useStyles();
 
     return (
@@ -60,13 +59,13 @@ function NavbarLink({icon: Icon, label, active, onClick}: NavbarLinkProps) {
     );
 }
 
-export default function NavbarMinimal() {
+export default function Sidebar() {
     const router = useRouter();
     const links = linkData.map(link => (
-        <NavbarLink
+        <SidebarLink
             {...link}
             key={link.label}
-            active={router.query.sub === link.label}
+            active={router.pathname === link.url}
             onClick={() => router.push(link.url).then(_ => ({}))}
         />
     ));
@@ -86,7 +85,7 @@ export default function NavbarMinimal() {
 
             <Navbar.Section>
                 <Stack justify="center" spacing={0}>
-                    <NavbarLink onClick={() => {
+                    <SidebarLink onClick={() => {
                         router.push("/account/login").then(_ => ({}))
                     }} icon={IconLogout} label="Logout"/>
                 </Stack>

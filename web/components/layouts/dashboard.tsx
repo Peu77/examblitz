@@ -1,6 +1,6 @@
-import Sidebar from "../dashboard/Sidebar"
+import Sidebar from "../sidebar"
 import {createStyles} from "@mantine/core";
-import React, {useEffect} from "react";
+import React from "react";
 
 type DashboardLayoutProps = {
     children: React.ReactNode,
@@ -12,8 +12,9 @@ const useStyles = createStyles((_) => ({
     }
 }));
 
-const Layout = ({children}: DashboardLayoutProps) => {
+const DashboardLayout = ({children}: DashboardLayoutProps) => {
     const {classes, cx} = useStyles();
+
     return (
         <div className={cx(classes.container)}>
             <Sidebar/>
@@ -22,4 +23,4 @@ const Layout = ({children}: DashboardLayoutProps) => {
     )
 }
 
-export default Layout
+export default DashboardLayout

@@ -77,9 +77,9 @@ interface HeaderResponsiveProps {
     links: { link: string; label: string }[];
 }
 
-export default function Nav ({ links }: HeaderResponsiveProps) {
-    const [opened, { toggle, close }] = useDisclosure(false);
-    const [active, setActive] = useState(links[0].link);
+export default function Navbar ({ links }: HeaderResponsiveProps) {
+    const [opened, { toggle }] = useDisclosure(false);
+    const [active] = useState(links[0].link);
     const { classes, cx } = useStyles();
 
     const items = links.map((link) => (
