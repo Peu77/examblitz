@@ -35,7 +35,7 @@ class TestRepositoryTest {
         testModel.setTitle("Test #" + id);
         testModel.setDescription("Good Test #" + id);
         testModel.setCreatedBy(user);
-        testModel.setVisibility(TestModel.TestVisibility.PRIVATE);
+        testModel.setVisibility(TestModel.TestVisibility.PUBLIC);
         testModel.setAllowedUsers(new HashSet<>());
         testRepository.save(testModel);
         return testModel;
