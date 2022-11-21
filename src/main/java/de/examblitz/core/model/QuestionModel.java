@@ -1,6 +1,8 @@
 package de.examblitz.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.examblitz.core.dto.SanitizedQuestionDto;
+import de.examblitz.core.dto.SanitizedTestDto;
 import de.examblitz.core.utils.StringListConverter;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,4 +50,12 @@ public class QuestionModel {
     @Column(name = "solution")
     private String stringSolution;
 
+    public SanitizedQuestionDto toSanitizedQuestionDto() {
+        return new SanitizedQuestionDto(
+                id,
+                description,
+                type,
+                options
+        );
+    }
 }

@@ -1,6 +1,7 @@
 package de.examblitz.core.controller;
 
 import de.examblitz.core.dto.*;
+import de.examblitz.core.model.TestModel;
 import de.examblitz.core.services.AuthService;
 import de.examblitz.core.services.TestService;
 import lombok.AllArgsConstructor;
@@ -28,25 +29,14 @@ public class TestController {
     public ResponseEntity<?> listTest() {
         var models = testService.findAllTests(authService.getCurrentUser());
 
-        return ResponseEntity.ok(
-                models.stream().map(model -> {
-                    var sanitizedQuestions = model.getQuestions().stream().map(questionModel -> new SanitizedQuestionDto(
-                            questionModel.getId(), questionModel.getDescription(),
-                            questionModel.getType(), questionModel.getOptions())).collect(Collectors.toList());
-
-                    return new SanitizedTestDto(
-                            model.getId(), model.getTitle(), model.getDescription(),
-                            model.getCreatedBy().getName(), model.getCreatedAt(),
-                            sanitizedQuestions);
-                }));
+        return ResponseEntity.ok(models.stream().map(TestModel::toSanitizedTestDto)
+                .collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteTest(@PathVariable("id") String id) {
         var success = testService.deleteTest(id, authService.getCurrentUser());
 
-        return (success ? ResponseEntity.accepted().body(new TestDeleteDto(id)) :
-                ResponseEntity.badRequest().build());
+        return (success ? ResponseEntity.accepted().body(new TestDeleteDto(id)) : ResponseEntity.badRequest().build());
     }
-
 }

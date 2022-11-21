@@ -1,5 +1,6 @@
 package de.examblitz.core.model;
 
+import de.examblitz.core.dto.SanitizedTestDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -9,6 +10,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Table(name = "tests")
 @Getter
@@ -58,4 +60,14 @@ public class TestModel {
             inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private Set<UserModel> allowedUsers = new HashSet<>();
 
+
+    public SanitizedTestDto toSanitizedTestDto() {
+        return new SanitizedTestDto(id,
+                title,
+                description,
+                createdBy.getName(),
+                createdAt,
+                questions.stream().map(QuestionModel::toSanitizedQuestionDto)
+                        .collect(Collectors.toList()));
+    }
 }
