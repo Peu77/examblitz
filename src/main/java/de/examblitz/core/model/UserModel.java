@@ -2,6 +2,7 @@ package de.examblitz.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.examblitz.core.utils.StringListConverter;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
