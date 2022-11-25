@@ -45,7 +45,6 @@ public class AuthService {
         userModel.setAccessibleTasks(Set.of());
 
         userRepository.save(userModel);
-
         return Optional.of(new UserPrincipal(userModel));
     }
 

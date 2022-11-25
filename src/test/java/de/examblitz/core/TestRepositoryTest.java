@@ -53,7 +53,6 @@ class TestRepositoryTest {
     @Test
     void findAll() {
         final UserModel testUser = createUserModel();
-
         int randomNumber = new Random().nextInt(10);
 
         for (int i = 0; i < randomNumber; i++) {

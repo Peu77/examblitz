@@ -71,7 +71,7 @@ export default function Tests(props: TestProps) {
                 margin: 0
             }}>
                 {tests.map((test, _) => (
-                    <Grid.Col md={6} lg={5} key={test.id}>
+                    <Grid.Col md={4} lg={18} key={test.id}>
                         <Card shadow="sm" p="lg" radius="md" withBorder>
                             <Group mb="xs">
                                 <Text weight={500}>{test.title}</Text>
