@@ -42,17 +42,17 @@ public class TestService {
      * @return The test that has been created.
      */
     public TestModel createTest(CreateTestDto data, UserModel user) {
-        TestModel model = new TestModel();
+        TestModel testModel = new TestModel();
 
-        model.setTitle(data.title());
-        model.setDescription(data.description());
-        model.setVisibility(data.visibility());
-        model.setAllowedUsers(new HashSet<>());
-        model.setCreatedBy(user);
-        model.setId(this.getValidId());
+        testModel.setTitle(data.title());
+        testModel.setDescription(data.description());
+        testModel.setVisibility(data.visibility());
+        testModel.setAllowedUsers(new HashSet<>());
+        testModel.setCreatedBy(user);
+        testModel.setId(this.getValidId());
+        testRepository.save(testModel);
 
-        testRepository.save(model);
-
+        /*
         data.questions().forEach(createQuestionDto -> {
             QuestionModel questionModel = new QuestionModel();
 
@@ -65,8 +65,9 @@ public class TestService {
 
             questionRepository.save(questionModel);
         });
+         */
 
-        return model;
+        return testModel;
     }
 
     /**

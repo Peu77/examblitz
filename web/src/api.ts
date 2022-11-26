@@ -18,8 +18,10 @@ const BASE_URL = process.env.API_URL ?? "/api"
  * This converts a simple function to a hook, that will use states
  * to emit the result (e.g. data)
  * @param fn The function to be converted
+ * @param onSuccess The function to be called on success
  */
-export function useCreateRequestHook<T extends unknown>(fn: (...args: any) => any): {
+export function useCreateRequestHook<T extends unknown>(fn: (...args: any) => any, onSuccess: (data: any) => any = (data: any) => {
+}): {
     fn: (args: T) => void,
     result: {
         loading: boolean,
@@ -45,7 +47,10 @@ export function useCreateRequestHook<T extends unknown>(fn: (...args: any) => an
                     return setError(true);
 
                 if (response.headers.get("Content-Length") !== "0")
-                    response.json().then(json => setData(json))
+                    response.json().then(json => {
+                        onSuccess(json)
+                        setData(json)
+                    })
             });
         },
         result: {loading, error, data, done}

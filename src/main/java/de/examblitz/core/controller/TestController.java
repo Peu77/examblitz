@@ -18,7 +18,7 @@ public class TestController {
     private final TestService testService;
     private final AuthService authService;
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<?> createTest(@RequestBody CreateTestDto request) {
         var model = testService.createTest(request, authService.getCurrentUser());
 
