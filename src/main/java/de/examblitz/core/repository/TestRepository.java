@@ -23,6 +23,13 @@ public interface TestRepository extends JpaRepository<TestModel, String> {
     @Query(value = "select * from tests where disabled = false and id = ?1", nativeQuery = true)
     Optional<TestModel> findById(String s);
 
+    /**
+     * find all tests that are visible to the user
+     * so either public or shared with the user or created by the user
+     *
+     * @param uuid
+     * @return
+     */
     @Query(value = "SELECT * from tests where tests.disabled = false and (CAST(created_by as VARCHAR(255)) = ?1 or visibility = 'PUBLIC' or (select COUNT(*) from allowed_users where allowed_users.test_id = tests.id and CAST(allowed_users.user_id AS varchar(255)) = ?1) = 1)", nativeQuery = true)
     List<TestModel> findAllForUser(String uuid);
 }

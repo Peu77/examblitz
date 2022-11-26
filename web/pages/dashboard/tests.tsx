@@ -1,10 +1,13 @@
 import {findAllTests, useDeleteTest} from "../../src/requests/testRequests";
-import {useState} from "react";
+import {ComponentPropsWithoutRef, forwardRef, useState} from "react";
 import {openConfirmModal} from "@mantine/modals";
-import {Button, Card, Grid, Group, Text} from "@mantine/core";
+import {Button, Card, Drawer, Grid, Group, Text, TextInput, Paper, Container, Textarea, Select} from "@mantine/core";
 import {showNotification} from "@mantine/notifications";
 import {Test} from "../../src/types/test";
 import {GetServerSidePropsContext} from "next";
+import Image from "next/image";
+import lockIcon from "../../assets/lock.svg";
+import lockOpenIcon from "../../assets/lock-open.svg";
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const response = await findAllTests({
@@ -32,11 +35,36 @@ interface TestProps {
     tests: Test[]
 }
 
+interface ItemProps extends ComponentPropsWithoutRef<'div'> {
+    icon: string;
+    label: string;
+    description: string;
+}
+
+
+const SelectVisibilityItem = forwardRef<HTMLDivElement, ItemProps>(
+    ({icon, label, description, ...others}: ItemProps, ref) => (
+        <div ref={ref} {...others}>
+            <Group noWrap>
+                <Image src={icon} width={20} height={20}/>
+
+                <div>
+                    <Text size="sm">{label}</Text>
+                    <Text size="xs" style={{opacity: 0.65}}>
+                        {description}
+                    </Text>
+                </div>
+            </Group>
+        </div>
+    )
+);
+
 export default function Tests(props: TestProps) {
     const {fn: deleteTest} = useDeleteTest()
     const [tests, setTests] = useState(props.tests)
+    const [openCreateTestDrawer, setOpenCreateTestDrawer] = useState(false)
 
-    const openModal = (testId: string, title: string) => openConfirmModal({
+    const openModalDeleteTest = (testId: string, title: string) => openConfirmModal({
         title: 'Please confirm your action',
         overlayBlur: 3,
         children: (
@@ -61,10 +89,38 @@ export default function Tests(props: TestProps) {
 
     return (
         <div>
+            <Drawer opened={openCreateTestDrawer} onClose={() => setOpenCreateTestDrawer(false)} size={"lg"} withCloseButton={false}>
+                <Container mt={"md"}>
+                    <Text size="xl">Create a new test</Text>
+                    <TextInput label="Title" placeholder="Title" required/>
+                    <Textarea label="Description" placeholder="Description" mt="md" minRows={3} maxRows={5} required/>
+                    <Select label="visibility" placeholder="visibility" mt="md" itemComponent={SelectVisibilityItem}
+                            data={[
+                                {
+                                    label: 'Public',
+                                    value: 'public',
+                                    description: 'Everyone can see this test',
+                                    icon: lockOpenIcon,
+                                },
+                                {
+                                    label: 'Private',
+                                    value: 'private',
+                                    description: 'Only you can see this test',
+                                    icon: lockIcon
+                                },
+                            ]} required/>
+                    <Group align={"center"} grow>
+                        <Button mt="md" color="teal" variant="outline" onClick={() => setOpenCreateTestDrawer(false)}>Create</Button>
+                        <Button mt="md" color="red" variant="outline" onClick={() => setOpenCreateTestDrawer(false)}>Cancel</Button>
+                    </Group>
+                </Container>
+            </Drawer>
+
             <Group>
                 <Text weight={800} size="xl">
                     Your Tests
                 </Text>
+                <Button onClick={() => setOpenCreateTestDrawer(true)}>Create</Button>
             </Group>
 
             <Grid style={{
@@ -82,12 +138,13 @@ export default function Tests(props: TestProps) {
                             </Text>
 
                             <Button variant="light" fullWidth color="red" radius="md"
-                                    onClick={() => openModal(test.id, test.title)}>Delete Test</Button>
+                                    onClick={() => openModalDeleteTest(test.id, test.title)}>Delete Test</Button>
                             <Button variant="light" fullWidth color="blue" radius="md">Start Test</Button>
                         </Card>
                     </Grid.Col>
                 ))}
             </Grid>
         </div>
-    );
+    )
+        ;
 }
