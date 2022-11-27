@@ -9,14 +9,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         }
     })
 
-    if (!response.ok)
-        return {
-            redirect: {
-                destination: "/account/login",
-                permanent: false
-            }
-        }
-
     return {
         props: {
             user: (await response.json()) as User

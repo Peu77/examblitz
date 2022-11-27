@@ -20,9 +20,9 @@ public class TestController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<?> createTest(@RequestBody CreateTestDto request) {
-        var model = testService.createTest(request, authService.getCurrentUser());
+        var testModel = testService.createTest(request, authService.getCurrentUser());
 
-        return ResponseEntity.ok(new TestIdDto(model.getId()));
+        return ResponseEntity.ok(testModel.toSanitizedTestDto());
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)

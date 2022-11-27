@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { createStyles, Header, Container, Group, Burger, Paper, Transition } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import {useState} from 'react';
+import {createStyles, Header, Container, Group, Burger, Paper, Button, Transition, Menu} from '@mantine/core';
+import {useDisclosure} from '@mantine/hooks';
+import {IconArrowsLeftRight, IconMessageCircle, IconPhoto, IconSearch, IconSettings, IconTrash} from "@tabler/icons";
 
 const HEADER_HEIGHT = 60;
 
@@ -67,8 +68,8 @@ const useStyles = createStyles((theme) => ({
 
     linkActive: {
         '&, &:hover': {
-            backgroundColor: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).background,
-            color: theme.fn.variant({ variant: 'light', color: theme.primaryColor }).color,
+            backgroundColor: theme.fn.variant({variant: 'light', color: theme.primaryColor}).background,
+            color: theme.fn.variant({variant: 'light', color: theme.primaryColor}).color,
         },
     },
 }));
@@ -77,16 +78,16 @@ interface HeaderResponsiveProps {
     links: { link: string; label: string }[];
 }
 
-export default function Navbar ({ links }: HeaderResponsiveProps) {
-    const [opened, { toggle }] = useDisclosure(false);
+export default function Navbar({links}: HeaderResponsiveProps) {
+    const [opened, {toggle}] = useDisclosure(false);
     const [active] = useState(links[0].link);
-    const { classes, cx } = useStyles();
+    const {classes, cx} = useStyles();
 
     const items = links.map((link) => (
         <a
             key={link.label}
             href={link.link}
-            className={cx(classes.link, { [classes.linkActive]: active === link.link })}
+            className={cx(classes.link, {[classes.linkActive]: active === link.link})}
         >
             {link.label}
         </a>
@@ -100,7 +101,7 @@ export default function Navbar ({ links }: HeaderResponsiveProps) {
                     {items}
                 </Group>
 
-                <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm" />
+                <Burger opened={opened} onClick={toggle} className={classes.burger} size="sm"/>
 
                 <Transition transition="pop-top-right" duration={200} mounted={opened}>
                     {(styles) => (

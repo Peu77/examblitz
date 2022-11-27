@@ -14,6 +14,33 @@ import {useEffect, useRef} from "react";
 import {useLogin} from "../../src/requests/authRequests";
 import {useRouter} from "next/router";
 import {showNotification} from "@mantine/notifications";
+import {GetServerSidePropsContext} from "next";
+import {me} from "../../src/requests/userRequests";
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+    const cookie = context.req.headers.cookie || ""
+
+    /**
+     * If the user is already logged in, redirect to the dashboard
+     */
+    const userResponse = await me({
+        headers: {
+            cookie
+        }
+    })
+
+    if (userResponse.ok)
+        return {
+            redirect: {
+                destination: "/dashboard",
+                permanent: false
+            }
+        }
+
+    return {
+        props: {}
+    }
+}
 
 const Login = () => {
     const nameRef = useRef<HTMLInputElement>(null);
